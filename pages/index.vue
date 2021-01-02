@@ -7,12 +7,12 @@
       :sources="[
         {
           type: 'png',
-          srcset: 'https://images.unsplash.com/photo-1458022479614-14737487b68c?h=900&q=80&w=1600',
+          srcset: 'https://images.unsplash.com/photo-1458022479614-14737487b68c?h=900&q=80&w=1600 1x',
           media: '(max-width: 640px)'
         },
         {
           type: 'png',
-          srcset: 'https://images.unsplash.com/photo-1423347834838-5162bb452ca7?h=900&q=80&w=1600',
+          srcset: 'https://images.unsplash.com/photo-1423347834838-5162bb452ca7?h=900&q=80&w=1600 1x',
           media: '(min-width: 640px)'
         }
       ]"
@@ -28,12 +28,12 @@
       :sources="[
         {
           type: 'png',
-          srcset: 'https://images.unsplash.com/photo-1426986877401-1b61ae18fb0e?h=900&q=80&w=1600',
+          srcset: 'https://images.unsplash.com/photo-1426986877401-1b61ae18fb0e?h=900&q=80&w=1600 1x',
           media: '(max-width: 640px)'
         },
         {
           type: 'png',
-          srcset: 'https://images.unsplash.com/photo-1426900985728-92d56f56fdb2?h=900&q=80&w=1600',
+          srcset: 'https://images.unsplash.com/photo-1426900985728-92d56f56fdb2?h=900&q=80&w=1600 1x',
           media: '(min-width: 640px)'
         }
       ]"
