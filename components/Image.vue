@@ -12,12 +12,15 @@
         v-for="(source, index) in sources"
         :key="index"
         :type="`image/${source.type}`"
-        :srcset="source.srcset"
+        :data-srcset="source.srcset"
         :media="source.media"
       />
       <img
-        :src="src"
-        class="image"
+        :data-src="src"
+        :class="[
+          'image',
+          'ui-image-lazyLoad'
+        ]"
       />
     </picture>
     <div class="placeholder">
@@ -28,12 +31,28 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import LazyLoad from 'vanilla-lazyload'
 import { createInitialBase64Image } from '../helper/base64'
 
 interface Source {
   type: string,
   srcset: string,
   media?: string
+}
+
+const options = {
+  elements_selector: '.ui-image-lazyLoad',
+  threshold: 0,
+  class_loaded: 'ui-image-lazyLoad-loaded'
+}
+
+const runLazyLoad = () => {
+  const win = window as any;
+  if (!win.lazyLoadInstance) {
+    console.log('runlazy')
+    win.lazyLoadInstance = new LazyLoad(options)
+  }
+  win.lazyLoadInstance.update()
 }
 
 export default Vue.extend({
@@ -59,12 +78,18 @@ export default Vue.extend({
       type: Array,
       required: false,
       default: []
-    } as PropOptions<Source[]>
+    } as PropOptions<Source[]>,
+    isLazy: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
   },
-  data(): {
-
-  } {
-    return {}
+  updated(): void{
+    runLazyLoad()
+  },
+  mounted(): void{
+    runLazyLoad()
   },
   computed: {
     initialImage(): string {
@@ -139,35 +164,35 @@ export default Vue.extend({
   }
 
   .loader {
-  font-size: 10px;
-  margin: 50px auto;
-  text-indent: -9999em;
-  width: 11em;
-  height: 11em;
-  border-radius: 50%;
-  background: #ffffff;
-  background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-  background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-  background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-  background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-  background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-  position: relative;
-  -webkit-animation: load3 1.4s infinite linear;
-  animation: load3 1.4s infinite linear;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-}
-.loader:before {
-  width: 50%;
-  height: 50%;
-  background: #ffffff;
-  border-radius: 100% 0 0 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  content: '';
-}
+    font-size: 10px;
+    margin: 50px auto;
+    text-indent: -9999em;
+    width: 11em;
+    height: 11em;
+    border-radius: 50%;
+    background: #ffffff;
+    background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    position: relative;
+    -webkit-animation: load3 1.4s infinite linear;
+    animation: load3 1.4s infinite linear;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  .loader:before {
+    width: 50%;
+    height: 50%;
+    background: #ffffff;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+  }
   .loader:after {
     background: #eaeaea;
     width: 75%;
@@ -199,6 +224,17 @@ export default Vue.extend({
     100% {
       -webkit-transform: rotate(360deg);
       transform: rotate(360deg);
+    }
+  }
+  .ui-image-lazyLoad-loaded {
+    animation: fadeIn 1.5s ease 0s 1 normal;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0
+    }
+    100% {
+      opacity: 1
     }
   }
 </style>

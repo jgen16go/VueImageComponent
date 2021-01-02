@@ -16,8 +16,29 @@
           media: '(min-width: 640px)'
         }
       ]"
+      :isLazy="false"
     />
-    <div>Cumulative Layout Shift</div>
+
+    <div class="scroll" v-for="item in range(0, 30)" :key="item">↓ scroll</div>
+
+    <BaseImage
+      :width="800"
+      :height="450"
+      src="https://images.unsplash.com/photo-1445358899385-5d4b6bbe0acb?h=900&q=80&w=1600"
+      :sources="[
+        {
+          type: 'png',
+          srcset: 'https://images.unsplash.com/photo-1426986877401-1b61ae18fb0e?h=900&q=80&w=1600',
+          media: '(max-width: 640px)'
+        },
+        {
+          type: 'png',
+          srcset: 'https://images.unsplash.com/photo-1426900985728-92d56f56fdb2?h=900&q=80&w=1600',
+          media: '(min-width: 640px)'
+        }
+      ]"
+      :isLazy="true"
+    />
   </div>
 </template>
 
@@ -28,9 +49,18 @@ import BaseImage from '../components/Image.vue'
 export default Vue.extend({
   components: {
     BaseImage
+  },
+  methods: {
+    range(s: number, e: number): number[] {
+      return Array.from({ length: e - s + 1 }, (_, i) => s + i)
+    }
   }
 })
 </script>
 
 <style>
+.scroll {
+  margin-bottom: 50px;
+  color: #666;
+}
 </style>
