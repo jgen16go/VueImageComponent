@@ -8,24 +8,45 @@
       />
     </div>
     <picture>
-      <source
-        v-for="(source, index) in sources"
-        :key="index"
-        :type="`image/${source.type}`"
-        :data-srcset="source.srcset"
-        :media="source.media"
-      />
-      <img
-        :data-src="src"
-        :class="[
-          'image',
-          'ui-image-lazyLoad'
-        ]"
-      />
+      <template v-if="isLazy">
+        <source
+          v-for="(source, index) in sources"
+          :key="index"
+          :type="`image/${source.type}`"
+          :data-srcset="source.srcset"
+          :media="source.media"
+        />
+        <img
+          :data-src="src"
+          :alt="alt"
+          :class="[
+            'image',
+            'ui-image-lazyLoad'
+          ]"
+        />
+      </template>
+      <template v-else>
+        <source
+          v-for="(source, index) in sources"
+          :key="index"
+          :type="`image/${source.type}`"
+          :srcset="source.srcset"
+          :media="source.media"
+        />
+        <img
+          :src="src"
+          :alt="alt"
+          :class="[
+            'image'
+          ]"
+        />
+      </template>
     </picture>
-    <div class="placeholder">
-      <div class="loader"></div>
-    </div>
+    <slot>
+      <div class="placeholder">
+        <div class="loader"></div>
+      </div>
+    </slot>
   </div>
 </template>
 
@@ -86,10 +107,10 @@ export default Vue.extend({
     }
   },
   updated(): void{
-    runLazyLoad()
+    if (this.isLazy) runLazyLoad()
   },
   mounted(): void{
-    runLazyLoad()
+    if (this.isLazy) runLazyLoad()
   },
   computed: {
     initialImage(): string {
@@ -167,8 +188,8 @@ export default Vue.extend({
     font-size: 10px;
     margin: 50px auto;
     text-indent: -9999em;
-    width: 11em;
-    height: 11em;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: #ffffff;
     background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
